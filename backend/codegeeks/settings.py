@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import django_mongodb_backend
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -75,19 +76,8 @@ WSGI_APPLICATION = 'codegeeks.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'djongo',
-        'NAME': 'walmart',
-        'CLIENT' : {
-                'host' : 'mongodb://<credentials>@127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.5.3',
-                'username' : 'root',
-                'password' : 'root',
-                }
-            
-    }
+    "default": django_mongodb_backend.parse_uri("mongodb://root:root@localhost:27017/walmart?authSource=admin"),
 }
-
-
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
@@ -127,5 +117,6 @@ STATIC_URL = 'static/'
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-AUTH_USER_MODEL = 'api.CustomUser'
+#modified for mongodb
+DEFAULT_AUTO_FIELD = 'django.db.models.CharField'
+#AUTH_USER_MODEL = 'api.CustomUser'
