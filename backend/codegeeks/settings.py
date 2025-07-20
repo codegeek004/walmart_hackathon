@@ -10,8 +10,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
-from pathlib import Path
 import django_mongodb_backend
+
+from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-7ol#j1a*597lv19^trudxksf$ii545$=*4rji$5w6%v4s0h4@*'
+SECRET_KEY = 'django-insecure-t^^mdhu9hspt4xz&6*(bbm79ou#nml+yo__!2%-e)kqay0c%@m'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -32,14 +33,13 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
+    'codegeeks.apps.MongoAdminConfig',
+    'codegeeks.apps.MongoAuthConfig',
+    'codegeeks.apps.MongoContentTypesConfig',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',
-    'api',
+    'api'
 ]
 
 MIDDLEWARE = [
@@ -78,6 +78,11 @@ WSGI_APPLICATION = 'codegeeks.wsgi.application'
 DATABASES = {
     "default": django_mongodb_backend.parse_uri("mongodb://root:root@localhost:27017/walmart?authSource=admin"),
 }
+
+# Database routers
+# https://docs.djangoproject.com/en/dev/ref/settings/#database-routers
+DATABASE_ROUTERS = ["django_mongodb_backend.routers.MongoRouter"]
+
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
@@ -117,6 +122,10 @@ STATIC_URL = 'static/'
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
-#modified for mongodb
-DEFAULT_AUTO_FIELD = 'django.db.models.CharField'
-#AUTH_USER_MODEL = 'api.CustomUser'
+DEFAULT_AUTO_FIELD = 'django_mongodb_backend.fields.ObjectIdAutoField'
+
+MIGRATION_MODULES = {
+    'admin': 'mongo_migrations.admin',
+    'auth': 'mongo_migrations.auth',
+    'contenttypes': 'mongo_migrations.contenttypes',
+}
