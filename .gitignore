@@ -1,1 +1,3 @@
 venv/
+backend/api/data.csv
+backend/api/data.json
