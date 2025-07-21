@@ -1,5 +1,5 @@
 from django.db import models
-from django_mongodb_backend.fields import ObjectIdAutoField
+from django_mongodb_backend.fields import ObjectIdAutoField, ObjectIdField
 from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
 
@@ -25,6 +25,8 @@ class Tickets(models.Model):
 
 class Product(models.Model):
     id = ObjectIdAutoField(primary_key=True)
+    store_id = ObjectIdField(default="64e63c52f1a743f8bdcd91ab") 
+    Title = models.CharField(max_length=120, blank=True)
     product_name = models.CharField(max_length=100)
     product_url = models.CharField(max_length=100)
     sentiment = models.CharField(max_length=100)
