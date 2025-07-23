@@ -6,14 +6,14 @@ from django.utils import timezone
 class CustomUser(models.Model):
     id = ObjectIdAutoField(primary_key=True)    
     role = models.CharField(max_length=10, default='store_admin')
-    contact = models.IntegerField(max_length=12)
+    contact = models.IntegerField()
 
 class Store(models.Model):
     id = ObjectIdAutoField(primary_key=True)
     location = models.CharField(max_length=100, default='Indore')
-    revenue = models.FloatField(max_length=150, null=True)
-    customers = models.IntegerField(max_length=100, null=True)
-    employees = models.IntegerField(max_length=100)
+    revenue = models.FloatField(null=True)
+    customers = models.IntegerField(null=True)
+    employees = models.IntegerField()
     rating = models.FloatField(default=5)
 
 class Tickets(models.Model):
