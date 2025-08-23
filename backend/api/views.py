@@ -6,6 +6,7 @@ from .models import *
 from django.contrib.auth import get_user_model
 from rest_framework.decorators import api_view
 from pymongo import MongoClient
+from django.db.models import Count, Q
 
 try:
     client = MongoClient('mongodb://root:root@127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.5.3')
@@ -31,14 +32,19 @@ class Dashboard(APIView):
             rating = i["Rating"]
             ratings.append(int(rating))
         
-        sentiment_qs = Product.objects.filter(sentiment="positive").count()
-        critical_issues = Tickets.objects.filter(category='critical').count()
+        positive_sentiment_qs = Product.objects.filter(sentiment="positive").count()
+        tickets_qs = Tickets.objects.aggregate(
+                active_tickets=Count('id', filter=Q(isResolved=False)),
+                critical_issues=Count('id', filter=Q(category='critical'))
+            )
         avg_rating = sum(ratings)/len(ratings)
+        avg_rating = round(avg_rating, 2) 
      
         return Response({
                 "Total Feedbacks" : total_feedbacks,
-                "Sentiments" : sentiment_qs,
-                "Critical Issues" : critical_issues,
+                "Positive Reviews" : positive_sentiment_qs,
+                "Active Tickets" : tickets_qs['active_tickets'],
+                "Critical Issues" : tickets_qs['critical_issues'],
                 "Average Rating" : avg_rating
             })
 
