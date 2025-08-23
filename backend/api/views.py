@@ -41,12 +41,13 @@ class Dashboard(APIView):
         avg_rating = round(avg_rating, 2) 
      
         return Response({
-                "Total Feedbacks" : total_feedbacks,
-                "Positive Reviews" : positive_sentiment_qs,
-                "Active Tickets" : tickets_qs['active_tickets'],
-                "Critical Issues" : tickets_qs['critical_issues'],
-                "Average Rating" : avg_rating
+                "total_feedbacks" : total_feedbacks,
+                "positive_reviews" : positive_sentiment_qs,
+                "active_tickets" : tickets_qs['active_tickets'],
+                "critical_issues" : tickets_qs['critical_issues'],
+                "average_rating" : avg_rating
             })
+
 
 
 
