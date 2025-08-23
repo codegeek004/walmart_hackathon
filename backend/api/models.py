@@ -19,7 +19,7 @@ class Store(models.Model):
 class Tickets(models.Model):
     id = ObjectIdAutoField(primary_key=True)
     category = models.CharField(max_length=100)
-    isResolved = models.CharField(max_length=10)
+    isResolved = models.BooleanField(max_length=10)
     date = models.DateTimeField(default=timezone.now())
     priority = models.CharField(max_length=50)
 
