@@ -8,20 +8,14 @@ class CustomUser(models.Model):
     role = models.CharField(max_length=10, default='store_admin')
     contact = models.IntegerField()
 
-class Store(models.Model):
-    id = ObjectIdAutoField(primary_key=True)
-    location = models.CharField(max_length=100, default='Indore')
-    revenue = models.FloatField(null=True)
-    customers = models.IntegerField(null=True)
-    employees = models.IntegerField()
-    rating = models.FloatField(default=5)
-
 class Tickets(models.Model):
     id = ObjectIdAutoField(primary_key=True)
     category = models.CharField(max_length=100)
-    isResolved = models.BooleanField(max_length=10)
-    date = models.DateTimeField(default=timezone.now())
+    isResolved = models.BooleanField()
+    date = models.DateTimeField(default=timezone.now)
+    store = models.JSONField(default=list)
     priority = models.CharField(max_length=50)
+
 
 class Product(models.Model):
     id = ObjectIdAutoField(primary_key=True)
@@ -29,10 +23,11 @@ class Product(models.Model):
     Title = models.CharField(max_length=120, blank=True)
     product_name = models.CharField(max_length=100)
     product_url = models.CharField(max_length=100)
-    sentiment = models.CharField(max_length=100)
-    review = models.CharField(max_length=150)
-    reviewer_name = models.CharField(max_length=100)
-    date = models.DateTimeField(default=timezone.now())
+    store = models.JSONField(default=list)
+    review = models.JSONField(default=list)
+
+    
+
 
 
 
