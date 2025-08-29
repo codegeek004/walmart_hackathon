@@ -19,8 +19,6 @@ class Tickets(models.Model):
 
 class Product(models.Model):
     id = ObjectIdAutoField(primary_key=True)
-    store_id = ObjectIdField(default="64e63c52f1a743f8bdcd91ab") 
-    Title = models.CharField(max_length=120, blank=True)
     product_name = models.CharField(max_length=100)
     product_url = models.CharField(max_length=100)
     store = models.JSONField(default=list)
