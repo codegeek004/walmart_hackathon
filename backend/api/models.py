@@ -24,7 +24,7 @@ class Product(models.Model):
     product_name = models.CharField(max_length=100)
     product_url = models.CharField(max_length=100)
     store = models.JSONField(default=list)
-    review = models.JSONField(default=list)
+    reviews = models.JSONField(default=list)
 
     
 
