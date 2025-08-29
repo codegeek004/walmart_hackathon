@@ -8,6 +8,7 @@ from rest_framework.decorators import api_view
 from pymongo import MongoClient
 from django.db.models import Count, Q
 from .serializers import *
+import json
 
 try:
     client = MongoClient('mongodb://root:root@127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.5.3')
@@ -51,11 +52,17 @@ class Dashboard(APIView):
 
 class Feedback(APIView):
     def get(self, request):
-        products = Product.objects.all()
+        products = list(db['api_product'].find({}, {'_id' : 0}))
         serializer = FeedbackSerializer(products, many=True)
         return Response(serializer.data)
 
-    
+    def post(self, request, format=None):
+        serializer = FeedbackSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 
 
