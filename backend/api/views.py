@@ -27,24 +27,25 @@ class Dashboard(APIView):
     def get(self, request, *args, **kwargs):
         total_feedbacks = Product.objects.count()
         products = db['api_product']
-        products_objects = products.find({}, {"_id":0, "rating":1})
+        products_objects = products.find({}, {})
         ratings = []
+        positive_count = 0
         for i in products_objects:
-            rating = i.get('rating')
-            if rating is not None:
-                ratings.append(int(rating))
-
-        positive_sentiment_qs = Product.objects.filter(sentiment="positive").count()
+            ratings.append(i['store']['rating'])
+            if i['reviews']['sentiment'] != 'negative':
+                positive_count+=1
+        
         tickets_qs = Tickets.objects.aggregate(
                 active_tickets=Count('id', filter=Q(isResolved=False)),
                 critical_issues=Count('id', filter=Q(category='critical'))
             )
+
         avg_rating = sum(ratings)/len(ratings)
         avg_rating = round(avg_rating, 2) 
      
         return Response({
                 "total_feedbacks" : total_feedbacks,
-                "positive_reviews" : positive_sentiment_qs,
+                "positive_reviews" : positive_count,
                 "active_tickets" : tickets_qs['active_tickets'],
                 "critical_issues" : tickets_qs['critical_issues'],
                 "average_rating" : avg_rating
