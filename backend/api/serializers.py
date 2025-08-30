@@ -8,11 +8,7 @@ class ReviewSerializer(serializers.Serializer):
 	review = serializers.CharField()
 	review_date = serializers.DateTimeField(default=timezone.now)
 	sentiment = serializers.CharField(max_length=50, default="positive")
-	five_star = serializers.IntegerField()
-	four_star = serializers.IntegerField()
-	three_star = serializers.IntegerField()
-	two_star = serializers.IntegerField()
-	one_star = serializers.IntegerField()
+	
 
 class StoreSerializer(serializers.Serializer):
 	location = serializers.CharField(max_length=100, default='Palasia, Indore')
@@ -24,7 +20,7 @@ class StoreSerializer(serializers.Serializer):
 class FeedbackSerializer(serializers.ModelSerializer):
 	id = serializers.CharField(read_only=True)
 	store = StoreSerializer()
-	reviews = ReviewSerializer(many=True)
+	reviews = ReviewSerializer()
 
 	class Meta:
 		model = Product
