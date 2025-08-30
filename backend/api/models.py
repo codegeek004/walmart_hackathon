@@ -23,6 +23,11 @@ class Product(models.Model):
     product_url = models.CharField(max_length=100)
     store = models.JSONField(default=list)
     reviews = models.JSONField(default=list)
+    five_star = models.IntegerField(default=0)
+    four_star = models.IntegerField(default=0)
+    three_star = models.IntegerField(default=0)
+    two_star = models.IntegerField(default=0)
+    one_star = models.IntegerField(default=0)
 
     
 
