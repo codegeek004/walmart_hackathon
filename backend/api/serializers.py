@@ -2,6 +2,8 @@ from rest_framework import serializers
 from .models import *
 from django.utils import timezone
 from django.core.validators import MinValueValidator, MaxValueValidator
+from bson import ObjectId
+
 
 class ReviewSerializer(serializers.Serializer):
 	reviewer_name = serializers.CharField(max_length=100)
@@ -28,6 +30,22 @@ class FeedbackSerializer(serializers.ModelSerializer):
 
 	def create(self, validated_data):
 		return Product.objects.create(**validated_data)
+
+class TicketSerializer(serializers.ModelSerializer):
+	id = serializers.CharField(read_only=True)
+	class Meta:
+		model = Tickets 
+		fields = "__all__"
+
+	def create(self, validated_data):
+		return Tickets.objects.create(**validated_data)
+
+
+
+
+
+
+
 
 
 
