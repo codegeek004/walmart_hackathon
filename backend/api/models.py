@@ -11,7 +11,7 @@ class CustomUser(models.Model):
 class Tickets(models.Model):
     id = ObjectIdAutoField(primary_key=True)
     category = models.CharField(max_length=100)
-    isResolved = models.BooleanField()
+    isResolved = models.BooleanField(default=False)
     date = models.DateTimeField(default=timezone.now)
     store = models.JSONField(default=list)
     priority = models.CharField(max_length=50)
