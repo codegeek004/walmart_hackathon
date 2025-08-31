@@ -8,7 +8,7 @@ from rest_framework.decorators import api_view
 from pymongo import MongoClient
 from django.db.models import Count, Q
 from .serializers import *
-import json
+from bson import ObjectId
 
 try:
     client = MongoClient('mongodb://root:root@127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.5.3')
@@ -54,8 +54,14 @@ class Dashboard(APIView):
 class Feedback(APIView):
     def get(self, request):
         products = list(db['api_product'].find({}, {'_id' : 0}))
+        print(products)
+        stores = []
+        for i in products:
+            print(i)
+            stores.append(i['store'])
+        print(stores)
         serializer = FeedbackSerializer(products, many=True)
-        return Response(serializer.data)
+        return Response({"products" : serializer.data, "stores" : stores})
 
     def post(self, request, format=None):
         serializer = FeedbackSerializer(data=request.data)
@@ -63,6 +69,37 @@ class Feedback(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class Tickets(APIView):
+    def get(self, request):
+        try:
+            tickets = list(db['api_tickets'].find({}, {'_id':0}))
+            serializer = TicketSerializer(tickets, many=True)
+            return Response({"tickets" : serializer.data})
+        except Exception as e:
+            return Response({"Error occurred" : e})        
+
+    def post(self, request):
+        serializer = TicketSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def patch(self, request, ticket_id):
+        try:
+            ticket_id = ObjectId(ticket_id)
+            document = db.api_ticket.find_one({"_id" : ticket_id})
+            serializer = TicketSerializer(data=request.data, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            print(f"Exception : {e}")
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 
 
 
